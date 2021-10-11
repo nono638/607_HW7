@@ -1,0 +1,48 @@
+---
+title: "NCollin_607_Hw7"
+author: "Noah Collin"
+date: "10/10/2021"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r setup2, include = FALSE}
+library(tidyverse)
+
+```
+## HTML
+(installation code commented out)
+```{r HTMLPortion}
+
+#install.packages("XML")
+library(XML)
+tables <- readHTMLTable("BooksILike.html")
+#str(tables)
+htmldf1 <- as.data.frame(  (tables[1]))
+#class(htmldf1)
+names(htmldf1) <- c("Title","Author","Copywritten")
+print(htmldf1)
+```
+## XML
+```{r XMLPortion}
+
+xml1 <- xmlParse("BooksILike.xml")
+rootNode1 <- xmlRoot(xml1)
+rootNode1[1]
+data <- xmlSApply(rootNode1,function(x) xmlSApply(x, xmlValue))
+xmldf <- data.frame(t(data),row.names = NULL)
+xmldf
+```
+## JSON
+```{r jsonPortion}
+library(jsonlite)
+
+jsonDF <- fromJSON("BooksILike.json") %>% as.data.frame()
+class(jsonDF)
+jsonDF
+```
+## The three dataframes are essentially identical.  The code to generate them was not.
